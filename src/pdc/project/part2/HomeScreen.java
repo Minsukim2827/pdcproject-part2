@@ -9,7 +9,6 @@ import java.awt.event.ActionListener;
 
 public class HomeScreen extends JFrame {
 
-    private BankServiceCUI bankService;
 
     public HomeScreen(String username) {
         super("Banking System - Home");
@@ -110,7 +109,7 @@ public class HomeScreen extends JFrame {
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
                     public void run() {
-                        SplashScreen splashscreen = new SplashScreen(bankService);
+                        SplashScreen splashscreen = new SplashScreen();
                         splashscreen.setLocation(getLocation());
                         splashscreen.setVisible(true);
                     }

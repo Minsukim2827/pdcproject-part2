@@ -7,11 +7,9 @@ import java.awt.event.ActionListener;
 
 public class SplashScreen extends JFrame {
 
-    private BankServiceCUI bankService;
 
 
-    public SplashScreen(BankServiceCUI bankService) {
-        this.bankService = bankService;
+    public SplashScreen() {
         setTitle("ASF Banking");
         setSize(600, 400);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -87,7 +85,7 @@ public class SplashScreen extends JFrame {
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
                     public void run() {
-                        LoginWindow loginWindow = new LoginWindow(bankService);
+                        LoginWindow loginWindow = new LoginWindow();
                         loginWindow.setVisible(true);
                     }
                 });

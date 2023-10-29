@@ -6,15 +6,13 @@ import javax.swing.*;
 public class MainBankingApp {
     public static void main(String[] args) {
         DBManager dbManager = new DBManager();
-        FileHandler fileHandler = new FileHandler();
-        HashMap<Integer, Customer> customers = fileHandler.loadCustomers();
-        BankServiceCUI bankService = new BankServiceCUI(customers, fileHandler);
-        printExistingCustomerIDs(bankService);
+        dbManager.populateUsedIds();
+       // BankServiceCUI bankService = new BankServiceCUI(customers);
 
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                SplashScreen splashScreen = new SplashScreen(bankService);
+                SplashScreen splashScreen = new SplashScreen();
                 splashScreen.showSplashScreen();
             }
         });
@@ -22,12 +20,5 @@ public class MainBankingApp {
         dbManager.closeConnection();
     }
 
-    private static void printExistingCustomerIDs(BankServiceCUI bankService) {
-        HashMap<Integer, Customer> customers = bankService.getCustomers();
-        System.out.println("Existing Customer IDs:");
-        for (int customerID : customers.keySet()) {
-            System.out.println(customerID);
-        }
-        System.out.println("-----------------------");
-    }
+
 }

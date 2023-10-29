@@ -9,7 +9,6 @@ import javax.swing.*;
 
 public class DeleteAccountScreen extends JFrame {
 
-    private BankServiceCUI bankService;
 
     public DeleteAccountScreen() {
         super("Banking System - Delete Account");
@@ -24,13 +23,23 @@ public class DeleteAccountScreen extends JFrame {
         JButton deleteButton = new JButton("Delete Account");
         JButton returnButton = new JButton("Return");
 
-        deleteButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String customerId = customerIdField.getText();
-                JOptionPane.showMessageDialog(DeleteAccountScreen.this, "Account deleted for Customer ID: " + customerId);
-            }
-        });
+deleteButton.addActionListener(new ActionListener() {
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        int customerId = Integer.parseInt(customerIdField.getText());
+        DBManager dbManager = new DBManager();
+        Customer customer = dbManager.getCustomerById(customerId);
+        if (customer == null) {
+            JOptionPane.showMessageDialog(DeleteAccountScreen.this, "No account found for Customer ID: " + customerId);
+            dbManager.closeConnection(); // Close connection here if customer is null
+            return;
+        }
+
+        dbManager.deleteCustomer(customerId);
+        JOptionPane.showMessageDialog(DeleteAccountScreen.this, "Account deleted for Customer ID: " + customerId);
+        dbManager.closeConnection(); // Close connection here after all operations
+    }
+});
 
         returnButton.addActionListener(new ActionListener() {
             @Override
@@ -38,7 +47,7 @@ public class DeleteAccountScreen extends JFrame {
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
                     public void run() {
-                        SplashScreen splashscreen = new SplashScreen(bankService);
+                        SplashScreen splashscreen = new SplashScreen();
                         splashscreen.setLocation(getLocation());
                         splashscreen.setVisible(true);
                     }

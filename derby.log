@@ -1,14 +1,13 @@
-Sun Oct 29 20:27:48 NZDT 2023 : Apache Derby Network Server - 10.14.2.0 - (1828579) started and ready to accept connections on port 1527
 ----------------------------------------------------------------
-Sun Oct 29 20:27:50 NZDT 2023:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.2.0 - (1828579): instance a816c00e-018b-7a54-ed1e-00004c27548e 
-on database directory C:\Users\Minsu\Desktop\Uni\comp603\pdc-project-part2\BankDB with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@2cdf8d8a 
-Loaded from file:/C:/Users/Minsu/Desktop/Uni/comp603/db-derby-10.14.2.0-bin/db-derby-10.14.2.0-bin/lib/derby.jar
+Sun Oct 29 22:53:38 NZDT 2023:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.14.2.0 - (1828579): instance a816c00e-018b-7ada-7064-00000f708c30 
+on database directory C:\Users\Minsu\Desktop\Uni\comp603\pdc-project-part2\BankDB with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@4f4a7090 
+Loaded from file:/C:/Users/Minsu/Desktop/Uni/comp603/pdc-project-part2/lib/derby.jar
 java.vendor=Oracle Corporation
 java.runtime.version=11.0.20+9-LTS-256
-user.dir=C:\Users\Minsu\Desktop\Uni\comp603\db-derby-10.14.2.0-bin\db-derby-10.14.2.0-bin
+user.dir=C:\Users\Minsu\Desktop\Uni\comp603\pdc-project-part2
 os.name=Windows 11
 os.arch=amd64
 os.version=10.0
-derby.system.home=C:\Users\Minsu\Desktop\Uni\comp603\pdc-project-part2
+derby.system.home=null
 Database Class Loader started - derby.database.classpath=''
