@@ -31,7 +31,7 @@ import javax.swing.*;
 public class ChangePhoneNumScreen extends JFrame {
 
     private BankServiceCUI bankService;
-    private FileHandler fileHandler;
+
 
     public ChangePhoneNumScreen() {
         super("Banking System - Change Phone Number");
@@ -59,7 +59,7 @@ public class ChangePhoneNumScreen extends JFrame {
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
                     public void run() {
-                        SplashScreen splashscreen = new SplashScreen(bankService, fileHandler);
+                        SplashScreen splashscreen = new SplashScreen(bankService);
                         splashscreen.setLocation(getLocation());
                         splashscreen.setVisible(true);
                     }

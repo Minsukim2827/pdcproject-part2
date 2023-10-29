@@ -14,7 +14,7 @@ public class MainBankingApp {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                SplashScreen splashScreen = new SplashScreen(bankService, fileHandler);
+                SplashScreen splashScreen = new SplashScreen(bankService);
                 splashScreen.showSplashScreen();
             }
         });

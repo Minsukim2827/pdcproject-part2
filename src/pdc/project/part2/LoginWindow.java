@@ -10,13 +10,11 @@ public class LoginWindow extends JFrame {
 
     private JTextField customerID;
     private BankServiceCUI bankService;
-    private FileHandler fileHandler;
 
-    public LoginWindow(BankServiceCUI bankService, FileHandler fileHandler) {
+    public LoginWindow(BankServiceCUI bankService) {
         super("Banking System - Login");
 
         this.bankService = bankService; 
-        this.fileHandler = fileHandler; 
 
         JPanel loginPanel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();

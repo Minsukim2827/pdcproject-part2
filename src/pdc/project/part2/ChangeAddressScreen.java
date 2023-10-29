@@ -10,7 +10,6 @@ import javax.swing.*;
 public class ChangeAddressScreen extends JFrame {
 
     private BankServiceCUI bankService;
-    private FileHandler fileHandler;
 
     public ChangeAddressScreen() {
         super("Banking System - Change Address");
@@ -38,7 +37,7 @@ public class ChangeAddressScreen extends JFrame {
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
                     public void run() {
-                        SplashScreen splashscreen = new SplashScreen(bankService, fileHandler);
+                        SplashScreen splashscreen = new SplashScreen(bankService);
                         splashscreen.setLocation(getLocation());
                         splashscreen.setVisible(true);
                     }

@@ -3,6 +3,7 @@ package pdc.project.part2;
 import java.util.Queue;
 import java.util.LinkedList;
 import java.util.Scanner;
+import java.util.*;
 
 public abstract class BankAccount {
 
@@ -11,6 +12,9 @@ public abstract class BankAccount {
     private Queue<Transaction> transactionHistory;
     private double interestRate;
     private double currentYearlyInterest;
+    private static int increment = 0;
+    private static HashSet<Integer> usedIDs = new HashSet<>();
+    private int accountId;
     Scanner scanner = new Scanner(System.in);
 
     public BankAccount(String accountType, double accountBalance, double interestRate) {
@@ -19,6 +23,12 @@ public abstract class BankAccount {
         this.transactionHistory = new LinkedList<>();
         this.interestRate = interestRate;
         this.currentYearlyInterest = 0.0;
+
+        while (usedIDs.contains(increment)) {
+            increment++;
+        }
+        this.accountId = increment;
+        usedIDs.add(this.accountId);
     }
 
     // each account type has different interest rates
@@ -29,9 +39,9 @@ public abstract class BankAccount {
         while (true) {
             if (amount > 0) {
                 accountBalance += amount;
-            Transaction depositTransaction = new Transaction("Deposit", amount);
-            addTransaction(depositTransaction);
-            System.out.println("Deposit successful. Remaining balance: $" + this.accountBalance);
+                Transaction depositTransaction = new Transaction("Deposit", amount);
+                addTransaction(depositTransaction);
+                System.out.println("Deposit successful. Remaining balance: $" + this.accountBalance);
                 break;
             } else {
                 System.out.println("Invalid deposit amount. Please enter a positive amount:");
@@ -46,9 +56,9 @@ public abstract class BankAccount {
             if (amount > 0) {
                 if (accountBalance >= amount) {
                     accountBalance -= amount;
-                                    Transaction withdrawTransaction = new Transaction("Withdrawal", amount);
-                addTransaction(withdrawTransaction);
-                System.out.println("Withdrawal successful. Remaining balance: $" + this.accountBalance);
+                    Transaction withdrawTransaction = new Transaction("Withdrawal", amount);
+                    addTransaction(withdrawTransaction);
+                    System.out.println("Withdrawal successful. Remaining balance: $" + this.accountBalance);
                     break;
                 } else {
                     System.out.println("Insufficient balance");
@@ -69,9 +79,17 @@ public abstract class BankAccount {
         }
     }
 
+    public static boolean accountExists(int accountIdToCheck) {
+        return usedIDs.contains(accountIdToCheck);
+    }
+
     // Getters and setters
     public String getAccountType() {
         return accountType;
+    }
+
+    public int getAccountId() {
+        return accountId;
     }
 
     public double getAccountBalance() {
@@ -97,21 +115,22 @@ public abstract class BankAccount {
     public void setYearlyInterest(double yearlyInterest) {
         this.currentYearlyInterest = yearlyInterest;
     }
-        public void setTransactionHistory(Queue<Transaction> transactionHistory) {
+
+    public void setTransactionHistory(Queue<Transaction> transactionHistory) {
         this.transactionHistory = transactionHistory;
     }
 
-        //for parsing to text file
-public String toStringFormatted() {
-    StringBuilder sb = new StringBuilder(String.format("%s,%f,%f,", accountType, accountBalance, interestRate));
+    //for parsing to text file
+    public String toStringFormatted() {
+        StringBuilder sb = new StringBuilder(String.format("%s,%f,%f,", accountType, accountBalance, interestRate));
 
-    for (Transaction transaction : transactionHistory) {
-        sb.append(transaction.toStringFormatted());
-        
+        for (Transaction transaction : transactionHistory) {
+            sb.append(transaction.toStringFormatted());
+
+        }
+
+        return sb.toString();
     }
-
-    return sb.toString();
-}
 
 // to string method
     @Override
