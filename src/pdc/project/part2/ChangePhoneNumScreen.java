@@ -29,9 +29,12 @@ import javax.swing.*;
 //import com.mycompany.comp603project.FileHandler;
 
 public class ChangePhoneNumScreen extends JFrame {
+    private Customer customer;
 
-    public ChangePhoneNumScreen() {
+    public ChangePhoneNumScreen(Customer customer) {
+        
         super("Banking System - Change Phone Number");
+        this.customer = customer;
         setSize(600, 400);
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -43,12 +46,18 @@ public class ChangePhoneNumScreen extends JFrame {
         JButton changePhoneNumber = new JButton("Change");
         JButton returnButton = new JButton("Return");
 
-        changePhoneNumber.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // implement withdraw function @minsu
-            }
-        });
+changePhoneNumber.addActionListener(new ActionListener() {
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        String newPhoneNumber = phoneNumField.getText();
+        customer.setPhoneNumber(newPhoneNumber); // update the phone number in the Customer object
+
+        // Update the phone number in the database
+        DBManager dbManager = new DBManager();
+        dbManager.updateCustomerPhoneNumber(customer.getCustomerId(), newPhoneNumber);
+    }
+});
+
 
         returnButton.addActionListener(new ActionListener() {
             @Override
@@ -56,9 +65,9 @@ public class ChangePhoneNumScreen extends JFrame {
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
                     public void run() {
-                        SplashScreen splashscreen = new SplashScreen();
-                        splashscreen.setLocation(getLocation());
-                        splashscreen.setVisible(true);
+                        HomeScreen homeScreen = new HomeScreen(customer);
+                        homeScreen.setLocation(getLocation());
+                        homeScreen.setVisible(true);
                     }
                 });
                 dispose();

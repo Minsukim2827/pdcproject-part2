@@ -8,10 +8,12 @@ import javax.swing.*;
 //import com.mycompany.comp603project.FileHandler;
 
 public class ChangeAddressScreen extends JFrame {
+    private Customer customer;
 
 
-    public ChangeAddressScreen() {
+    public ChangeAddressScreen(Customer customer) {
         super("Banking System - Change Address");
+        this.customer = customer;
         setSize(600, 400);
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -23,12 +25,18 @@ public class ChangeAddressScreen extends JFrame {
         JButton changeAddress = new JButton("Change");
         JButton returnButton = new JButton("Return");
 
-        changeAddress.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // implement withdraw function @minsu
-            }
-        });
+changeAddress.addActionListener(new ActionListener() {
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        String newAddress = AddressField.getText();
+        customer.setAddress(newAddress); // update the address in the Customer object
+
+        // Update the address in the database
+        DBManager dbManager = new DBManager();
+        dbManager.updateCustomerAddress(customer.getCustomerId(), newAddress);
+    }
+});
+
 
         returnButton.addActionListener(new ActionListener() {
             @Override
@@ -36,15 +44,14 @@ public class ChangeAddressScreen extends JFrame {
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
                     public void run() {
-                        SplashScreen splashscreen = new SplashScreen();
-                        splashscreen.setLocation(getLocation());
-                        splashscreen.setVisible(true);
+                        HomeScreen homeScreen = new HomeScreen(customer);
+                        homeScreen.setLocation(getLocation());
+                        homeScreen.setVisible(true);
                     }
                 });
                 dispose();
             }
         });
-
         gbc.gridx = 0;
         gbc.gridy = 0;
         add(customerAddress, gbc);

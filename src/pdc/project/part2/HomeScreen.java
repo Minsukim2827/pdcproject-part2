@@ -8,13 +8,14 @@ import java.awt.event.ActionListener;
 //import com.mycompany.comp603project.FileHandler;
 
 public class HomeScreen extends JFrame {
+    Customer customer;
 
-
-    public HomeScreen(String username) {
+    public HomeScreen(Customer customer) {
         super("Banking System - Home");
+        this.customer = customer;
 
         JPanel welcomePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        JLabel welcomeLabel = new JLabel("Welcome, " + username);
+        JLabel welcomeLabel = new JLabel("Welcome, " + customer.getCustomerName());
         welcomeLabel.setFont(new Font("Arial", Font.BOLD, 17));
         welcomePanel.add(welcomeLabel);
 
@@ -64,7 +65,7 @@ public class HomeScreen extends JFrame {
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
                     public void run() {
-                        ChangeAddressScreen changeAddressScreen = new ChangeAddressScreen();
+                        ChangeAddressScreen changeAddressScreen = new ChangeAddressScreen(customer);
                         changeAddressScreen.setLocation(getLocation());
                         changeAddressScreen.setVisible(true);
                     }
@@ -79,7 +80,7 @@ public class HomeScreen extends JFrame {
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
                     public void run() {
-                        ChangePhoneNumScreen changePhoneNumScreen = new ChangePhoneNumScreen();
+                        ChangePhoneNumScreen changePhoneNumScreen = new ChangePhoneNumScreen(customer);
                         changePhoneNumScreen.setLocation(getLocation());
                         changePhoneNumScreen.setVisible(true);
                     }
@@ -88,35 +89,40 @@ public class HomeScreen extends JFrame {
             }
         });
 
-        displayDetailsButton.addActionListener(new ActionListener() {
+displayDetailsButton.addActionListener(new ActionListener() {
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        SwingUtilities.invokeLater(new Runnable() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        DisplayDetailsScreen displayDetailsScreen = new DisplayDetailsScreen();
-                        displayDetailsScreen.setLocation(getLocation());
-                        displayDetailsScreen.setVisible(true);
-                    }
-                });
-                dispose();
+            public void run() {
+                DisplayDetailsScreen displayDetailsScreen = new DisplayDetailsScreen(customer);
+                displayDetailsScreen.setLocation(getLocation());
+                displayDetailsScreen.setVisible(true);
             }
         });
+        dispose();
+    }
+});
 
-        logoutButton.addActionListener(new ActionListener() {
+
+logoutButton.addActionListener(new ActionListener() {
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        // Update the customer's details to the database
+        DBManager dbManager = new DBManager();
+        dbManager.updateCustomerDetails(customer);
+
+        SwingUtilities.invokeLater(new Runnable() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        SplashScreen splashscreen = new SplashScreen();
-                        splashscreen.setLocation(getLocation());
-                        splashscreen.setVisible(true);
-                    }
-                });
-                dispose();
+            public void run() {
+                SplashScreen splashscreen = new SplashScreen();
+                splashscreen.setLocation(getLocation());
+                splashscreen.setVisible(true);
             }
         });
+        dispose();
+    }
+});
 
         mainPanel.add(withdrawButton);
         mainPanel.add(depositButton);

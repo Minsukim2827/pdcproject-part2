@@ -38,6 +38,29 @@ public class LoginWindow extends JFrame {
         inputPanel.add(customerIDLabel);
         inputPanel.add(customerID);
 
+        JButton backButton = new JButton("Back");
+backButton.addActionListener(new ActionListener() {
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                SplashScreen splashScreen = new SplashScreen();
+                splashScreen.setLocation(getLocation());
+                splashScreen.setVisible(true);
+            }
+        });
+        dispose();
+    }
+});
+
+gbc.gridx = 0;
+gbc.gridy = 2;
+gbc.gridwidth = 2;
+gbc.fill = GridBagConstraints.CENTER;
+loginPanel.add(backButton, gbc);
+
+        
         JButton loginButton = new JButton("Login");
         loginButton.addActionListener(new ActionListener() {
             @Override
@@ -48,7 +71,7 @@ public class LoginWindow extends JFrame {
                     int customerID = Integer.parseInt(customerIDText);
                     Customer customer = dbManager.getCustomerById(customerID);// get customer from database;
                     if (customer != null) {
-                        HomeScreen homeScreen = new HomeScreen(customer.getCustomerName());
+                        HomeScreen homeScreen = new HomeScreen(customer);
                         homeScreen.setVisible(true);
                         dispose();
                     } else {

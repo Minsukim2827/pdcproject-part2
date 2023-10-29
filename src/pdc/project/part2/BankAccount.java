@@ -122,6 +122,9 @@ public abstract class BankAccount {
     public void setTransactionHistory(Queue<Transaction> transactionHistory) {
         this.transactionHistory = transactionHistory;
     }
+    public Queue<Transaction> getTransactionHistory(){
+        return transactionHistory;
+    }
 
     //for parsing to text file
     public String toStringFormatted() {
