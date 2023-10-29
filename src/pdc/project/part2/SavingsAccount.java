@@ -11,6 +11,11 @@ public class SavingsAccount extends BankAccount {
             System.out.println("Initial balance is less than minimum balance requirement for Savings Account. Please try again");
         }
     }
+    
+        public SavingsAccount(double accountBalance) {
+        super("Savings Account", accountBalance, INTEREST_RATE);
+
+    }
 
 
     @Override

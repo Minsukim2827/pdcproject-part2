@@ -4,16 +4,20 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
+import java.sql.*;
 //import com.mycompany.comp603project.BankServiceCUI;
 //import com.mycompany.comp603project.FileHandler;
 
 public class NewAccountScreen extends JFrame {
 
     private BankServiceCUI bankService;
-    private FileHandler fileHandler;
+    private DBManager dbManager;
+
 
     public NewAccountScreen() {
+        
         super("Banking System - New Account");
+        dbManager = new DBManager();
         setTitle("New Account Creation");
         setSize(600, 400);
         setLayout(new GridBagLayout());
@@ -43,7 +47,28 @@ public class NewAccountScreen extends JFrame {
                 String address = addressField.getText();
                 String phone = phoneField.getText();
                 String selectedAccountType = (String) accountTypeComboBox.getSelectedItem();
-
+                
+                Customer newCustomer = new Customer(name, address, phone);
+                
+                        BankAccount newAccount;
+        switch (selectedAccountType) {
+            case "Student Account":
+                newAccount = new StudentAccount(0.0); // initial balance is 0.0
+                break;
+            case "Business Account":
+                newAccount = new BusinessAccount(0.0); // initial balance is 0.0
+                break;
+            case "Savings Account":
+                newAccount = new SavingsAccount(1000.0); // initial balance is 0.0
+                break;
+            default:
+                throw new IllegalArgumentException("Invalid account type: " + selectedAccountType);
+        }
+        
+        newCustomer.setBankAccount(newAccount);
+        
+        dbManager.insertCustomerAndAccount(newCustomer, newAccount);
+        
                 String message = "Name: " + name + "\nAddress: " + address + "\nPhone: " + phone + "\nAccount Type: " + selectedAccountType + "\nCustomer ID: "; // Put in customer ID in here @minsu
                 JOptionPane.showMessageDialog(NewAccountScreen.this, message);
             }
@@ -55,7 +80,7 @@ public class NewAccountScreen extends JFrame {
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
                     public void run() {
-                        SplashScreen splashscreen = new SplashScreen(bankService, fileHandler);
+                        SplashScreen splashscreen = new SplashScreen(bankService);
                         splashscreen.setLocation(getLocation());
                         splashscreen.setVisible(true);
                     }
@@ -95,6 +120,8 @@ public class NewAccountScreen extends JFrame {
         gbc.gridy = 5;
         add(returnButton, gbc);
     }
+    
+
 
     private void setInsets(GridBagConstraints gbc, int top, int left, int bottom, int right) {
         gbc.insets = new Insets(top, left, bottom, right);

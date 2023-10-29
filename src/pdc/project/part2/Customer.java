@@ -106,8 +106,8 @@ public class Customer {
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
-    
-        public static boolean customerExists(int customerIdToCheck) {
+
+    public static boolean customerExists(int customerIdToCheck) {
         // Check if the customerIdToCheck exists in the usedIDs HashSet
         return usedIDs.contains(customerIdToCheck);
     }

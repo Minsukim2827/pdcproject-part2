@@ -10,7 +10,6 @@ import javax.swing.*;
 public class DeleteAccountScreen extends JFrame {
 
     private BankServiceCUI bankService;
-    private FileHandler fileHandler;
 
     public DeleteAccountScreen() {
         super("Banking System - Delete Account");
@@ -39,7 +38,7 @@ public class DeleteAccountScreen extends JFrame {
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
                     public void run() {
-                        SplashScreen splashscreen = new SplashScreen(bankService, fileHandler);
+                        SplashScreen splashscreen = new SplashScreen(bankService);
                         splashscreen.setLocation(getLocation());
                         splashscreen.setVisible(true);
                     }

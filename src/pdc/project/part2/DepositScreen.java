@@ -10,7 +10,6 @@ import javax.swing.*;
 public class DepositScreen extends JFrame {
 
     private BankServiceCUI bankService;
-    private FileHandler fileHandler;
 
     public DepositScreen() {
         super("Banking System - Deposit Funds");
@@ -38,7 +37,7 @@ public class DepositScreen extends JFrame {
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
                     public void run() {
-                        SplashScreen splashscreen = new SplashScreen(bankService, fileHandler);
+                        SplashScreen splashscreen = new SplashScreen(bankService);
                         splashscreen.setLocation(getLocation());
                         splashscreen.setVisible(true);
                     }
