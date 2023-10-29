@@ -10,7 +10,6 @@ import java.sql.*;
 
 public class NewAccountScreen extends JFrame {
 
-    private BankServiceCUI bankService;
     private DBManager dbManager;
 
 
@@ -80,7 +79,7 @@ public class NewAccountScreen extends JFrame {
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
                     public void run() {
-                        SplashScreen splashscreen = new SplashScreen(bankService);
+                        SplashScreen splashscreen = new SplashScreen();
                         splashscreen.setLocation(getLocation());
                         splashscreen.setVisible(true);
                     }

@@ -78,6 +78,9 @@ public abstract class BankAccount {
             transactionHistory.poll();
         }
     }
+    public static void addUsedId(int id) {
+    usedIDs.add(id);
+}
 
     public static boolean accountExists(int accountIdToCheck) {
         return usedIDs.contains(accountIdToCheck);

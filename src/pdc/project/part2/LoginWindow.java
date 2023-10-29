@@ -9,12 +9,12 @@ import javax.swing.border.EmptyBorder;
 public class LoginWindow extends JFrame {
 
     private JTextField customerID;
-    private BankServiceCUI bankService;
+     private DBManager dbManager;
 
-    public LoginWindow(BankServiceCUI bankService) {
+    public LoginWindow() {
         super("Banking System - Login");
-
-        this.bankService = bankService; 
+        
+        dbManager = new DBManager();
 
         JPanel loginPanel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -46,7 +46,7 @@ public class LoginWindow extends JFrame {
 
                 try {
                     int customerID = Integer.parseInt(customerIDText);
-                    Customer customer = bankService.getCustomerById(customerID);
+                    Customer customer = dbManager.getCustomerById(customerID);// get customer from database;
                     if (customer != null) {
                         HomeScreen homeScreen = new HomeScreen(customer.getCustomerName());
                         homeScreen.setVisible(true);

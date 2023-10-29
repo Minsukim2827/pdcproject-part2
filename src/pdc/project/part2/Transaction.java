@@ -34,6 +34,9 @@ public class Transaction {
         this.date = date;
 
     }
+    public static void addUsedId(int id) {
+    usedIDs.add(id);
+}
 
     public static boolean transactionExists(int transactionIdToCheck) {
         return usedIDs.contains(transactionIdToCheck);
