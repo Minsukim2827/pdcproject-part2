@@ -121,7 +121,7 @@ public class NewAccountScreen extends JFrame {
         add(returnButton, gbc);
     }
     
-
+//ok
 
     private void setInsets(GridBagConstraints gbc, int top, int left, int bottom, int right) {
         gbc.insets = new Insets(top, left, bottom, right);
