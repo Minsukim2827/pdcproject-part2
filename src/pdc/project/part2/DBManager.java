@@ -68,7 +68,9 @@ public void makeConnection() {
     }
     
             public void insertCustomerAndAccount(Customer customer, BankAccount account) {
-        try (Connection conn = getConnection()) {
+                Connection conn = null;
+        try  {
+             conn = DriverManager.getConnection(URL, USER_NAME, PASSWORD);
             // insert the new customer into the CUSTOMER table
             String insertCustomerSql = "INSERT INTO CUSTOMER(CUSTOMER_ID, NAME, ADDRESS, PHONE_NUMBER) VALUES (?, ?, ?, ?)";
             try (PreparedStatement pstmt = conn.prepareStatement(insertCustomerSql)) {
@@ -91,7 +93,15 @@ public void makeConnection() {
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
+        }finally {
+        if (conn != null) {
+            try {
+                conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
+    }
     }
             
             public void populateUsedIds() {
