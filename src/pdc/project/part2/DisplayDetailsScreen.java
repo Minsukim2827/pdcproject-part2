@@ -61,7 +61,7 @@ public class DisplayDetailsScreen extends JFrame {
     }
 
     // Method to get details
-    private String getDetails() {
+    protected String getDetails() {
         StringBuilder details = new StringBuilder();
         details.append("Customer Details:\n");
         details.append("Name: " + customer.getCustomerName() + "\n");

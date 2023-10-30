@@ -82,7 +82,7 @@ public class NewAccountScreen extends JFrame {
     }
 
     // Method to handle account creation
-    private void createAccount(ActionEvent e) {
+    protected void createAccount(ActionEvent e) {
         String name = nameField.getText();
         String address = addressField.getText();
         String phone = phoneField.getText();

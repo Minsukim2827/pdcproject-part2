@@ -59,7 +59,7 @@ public class CurrentAccountScreen extends JFrame {
     }
 
     // Method to load accounts
-    private void loadAccounts() {
+    protected void loadAccounts() {
         Vector<String> accounts = new Vector<>();
         try {
             ResultSet rs = dbManager.getAllAccounts();
