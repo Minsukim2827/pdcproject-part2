@@ -16,6 +16,12 @@ public class CurrentAccountScreen extends JFrame {
     public CurrentAccountScreen() {
         super("Banking System - Current Account");
         dbManager = new DBManager();
+        setupUI();
+        loadAccounts();
+    }
+
+    // Method to setup UI
+    private void setupUI() {
         setTitle("Current Accounts");
         setSize(600, 400);
         setLayout(new BorderLayout());
@@ -25,25 +31,34 @@ public class CurrentAccountScreen extends JFrame {
 
         add(scrollPane, BorderLayout.CENTER);
 
-        backButton = new JButton("Back");
-        backButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                SplashScreen splashScreen = new SplashScreen();
-                splashScreen.setLocation(getLocation());
-                splashScreen.setVisible(true);
-                dispose();
-            }
-        });
+        setupBackButton();
 
         JPanel buttonPanel = new JPanel();
         buttonPanel.add(backButton);
 
         add(buttonPanel, BorderLayout.SOUTH);
-
-        loadAccounts();
     }
 
+    // Method to setup Back Button
+    private void setupBackButton() {
+        backButton = new JButton("Back");
+        backButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                returnToSplashScreen();
+            }
+        });
+    }
+
+    // Method to return to splash screen
+    private void returnToSplashScreen() {
+        SplashScreen splashScreen = new SplashScreen();
+        splashScreen.setLocation(getLocation());
+        splashScreen.setVisible(true);
+        dispose();
+    }
+
+    // Method to load accounts
     private void loadAccounts() {
         Vector<String> accounts = new Vector<>();
         try {

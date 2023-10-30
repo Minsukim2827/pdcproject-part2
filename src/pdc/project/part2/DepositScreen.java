@@ -6,29 +6,56 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
 import java.time.LocalDate;
 import java.util.Date;
-//import com.mycompany.comp603project.BankServiceCUI;
-//import com.mycompany.comp603project.FileHandler;
 
 public class DepositScreen extends JFrame {
     private Customer customer;
+    private JTextField depositField = new JTextField(20);
+    private JButton depositButton = new JButton("Deposit");
+    private JButton returnButton = new JButton("Return");
 
     public DepositScreen(Customer customer) {
         super("Banking System - Deposit Funds");
         this.customer = customer;
+        setupUI();
+    }
+
+    // Method to setup UI
+    private void setupUI() {
         setSize(600, 400);
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         setInsets(gbc, 10, 10, 10, 10);
 
         JLabel customerDeposit = new JLabel("How much would you like to deposit?");
-        JTextField depositField = new JTextField(20);
 
-        JButton depositButton = new JButton("Deposit");
-        JButton returnButton = new JButton("Return");
+        setupDepositButton();
+        setupReturnButton();
 
-depositButton.addActionListener(new ActionListener() {
-    @Override
-    public void actionPerformed(ActionEvent e) {
+        addComponentsToLayout(gbc, customerDeposit);
+    }
+
+    // Method to setup Deposit Button
+    private void setupDepositButton() {
+        depositButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                depositFunds();
+            }
+        });
+    }
+
+    // Method to setup Return Button
+    private void setupReturnButton() {
+        returnButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                returnToHomeScreen();
+            }
+        });
+    }
+
+    // Method to deposit funds
+    private void depositFunds() {
         String depositText = depositField.getText();
         try {
             double depositAmount = Double.parseDouble(depositText);
@@ -56,24 +83,22 @@ depositButton.addActionListener(new ActionListener() {
             JOptionPane.showMessageDialog(DepositScreen.this, "Invalid deposit amount format.");
         }
     }
-});
 
-
-        returnButton.addActionListener(new ActionListener() {
+    // Method to return to home screen
+    private void returnToHomeScreen() {
+        SwingUtilities.invokeLater(new Runnable() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        HomeScreen homeScreen = new HomeScreen(customer);
-                        homeScreen.setLocation(getLocation());
-                        homeScreen.setVisible(true);
-                    }
-                });
-                dispose();
+            public void run() {
+                HomeScreen homeScreen = new HomeScreen(customer);
+                homeScreen.setLocation(getLocation());
+                homeScreen.setVisible(true);
             }
         });
+        dispose();
+    }
 
+    // Method to add components to layout
+    private void addComponentsToLayout(GridBagConstraints gbc, JLabel customerDeposit) {
         gbc.gridx = 0;
         gbc.gridy = 0;
         add(customerDeposit, gbc);
@@ -91,5 +116,3 @@ depositButton.addActionListener(new ActionListener() {
         gbc.insets = new Insets(top, left, bottom, right);
     }
 }
-
-

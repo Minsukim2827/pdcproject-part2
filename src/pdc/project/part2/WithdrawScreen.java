@@ -2,33 +2,63 @@ package pdc.project.part2;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import javax.swing.*;
-//import com.mycompany.comp603project.BankServiceCUI;
-//import com.mycompany.comp603project.FileHandler;
 
 public class WithdrawScreen extends JFrame {
     private Customer customer;
     private DBManager dbManager;
+    private JTextField withdrawField;
 
     public WithdrawScreen(Customer customer) {
         super("Banking System - Withdraw Funds");
         this.customer = customer;
         dbManager = new DBManager();
+
+        setupUI();
+    }
+
+    // Method to setup the UI
+    private void setupUI() {
         setSize(600, 400);
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         setInsets(gbc, 10, 10, 10, 10);
 
+        setupWithdrawField(gbc);
+        setupButtons(gbc);
+    }
+
+    // Method to setup the withdraw field
+    private void setupWithdrawField(GridBagConstraints gbc) {
         JLabel customerWithdraw = new JLabel("How much would you like to withdraw?");
-        JTextField withdrawField = new JTextField(20);
+        withdrawField = new JTextField(20);
 
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        add(customerWithdraw, gbc);
+
+        gbc.gridx = 1;
+        add(withdrawField, gbc);
+    }
+
+    // Method to setup the buttons
+    private void setupButtons(GridBagConstraints gbc) {
         JButton withdrawButton = new JButton("Withdraw");
-        JButton returnButton = new JButton("Return");
+        withdrawButton.addActionListener(this::withdraw);
 
-withdrawButton.addActionListener(new ActionListener() {
-    @Override
-    public void actionPerformed(ActionEvent e) {
+        JButton returnButton = new JButton("Return");
+        returnButton.addActionListener(e -> openScreen(new HomeScreen(customer)));
+
+        gbc.gridx = 1;
+        gbc.gridy = 1;
+        add(withdrawButton, gbc);
+
+        gbc.gridy = 2;
+        add(returnButton, gbc);
+    }
+
+    // Method to handle withdrawal
+    private void withdraw(ActionEvent e) {
         String withdrawText = withdrawField.getText();
         try {
             double withdrawAmount = Double.parseDouble(withdrawText);
@@ -52,40 +82,17 @@ withdrawButton.addActionListener(new ActionListener() {
             JOptionPane.showMessageDialog(WithdrawScreen.this, "Invalid withdrawal amount format.");
         }
     }
-});
 
-
-
-        returnButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        HomeScreen homeScreen = new HomeScreen(customer);
-                        homeScreen.setLocation(getLocation());
-                        homeScreen.setVisible(true);
-                    }
-                });
-                dispose();
-            }
+    // Method to open a new screen
+    private void openScreen(JFrame screen) {
+        SwingUtilities.invokeLater(() -> {
+            screen.setLocation(getLocation());
+            screen.setVisible(true);
         });
-
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        add(customerWithdraw, gbc);
-
-        gbc.gridx = 1;
-        add(withdrawField, gbc);
-
-        gbc.gridy = 1;
-        add(withdrawButton, gbc);
-        gbc.gridy = 2;
-        add(returnButton, gbc);
+        dispose();
     }
 
     private void setInsets(GridBagConstraints gbc, int top, int left, int bottom, int right) {
         gbc.insets = new Insets(top, left, bottom, right);
     }
 }
-
