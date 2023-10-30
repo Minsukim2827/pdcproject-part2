@@ -35,7 +35,7 @@ public class HomeScreen extends JFrame {
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
                     public void run() {
-                        WithdrawScreen withdrawScreen = new WithdrawScreen();
+                        WithdrawScreen withdrawScreen = new WithdrawScreen(customer);
                         withdrawScreen.setLocation(getLocation());
                         withdrawScreen.setVisible(true);
                     }
@@ -50,7 +50,7 @@ public class HomeScreen extends JFrame {
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
                     public void run() {
-                        DepositScreen depositScreen = new DepositScreen();
+                        DepositScreen depositScreen = new DepositScreen(customer);
                         depositScreen.setLocation(getLocation());
                         depositScreen.setVisible(true);
                     }

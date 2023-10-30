@@ -27,6 +27,15 @@ public class Transaction {
         this.transactionId = increment;
         usedIDs.add(this.transactionId);
     }
+    
+        public Transaction(int transactionId, String transactionType, double amount, String date) {
+        this.transactionType = transactionType;
+        this.amount = amount;
+        this.date = date;
+
+        this.transactionId = transactionId;
+        usedIDs.add(this.transactionId);
+    }
 
     public Transaction(String transactionType, double amount, String date) {
         this.transactionType = transactionType;
@@ -34,6 +43,7 @@ public class Transaction {
         this.date = date;
 
     }
+    
     public static void addUsedId(int id) {
     usedIDs.add(id);
 }

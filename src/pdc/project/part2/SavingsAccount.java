@@ -16,6 +16,9 @@ public class SavingsAccount extends BankAccount {
         super("Savings Account", accountBalance, INTEREST_RATE);
 
     }
+                public SavingsAccount(int accountId, String accountType,double accountBalance, double interestRate) {
+        super(accountId, accountType, accountBalance, interestRate);
+    }
 
 
     @Override

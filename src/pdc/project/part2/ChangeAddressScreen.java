@@ -9,6 +9,7 @@ import javax.swing.*;
 
 public class ChangeAddressScreen extends JFrame {
     private Customer customer;
+    private JLabel resultMessage = new JLabel("");
 
 
     public ChangeAddressScreen(Customer customer) {
@@ -33,7 +34,13 @@ changeAddress.addActionListener(new ActionListener() {
 
         // Update the address in the database
         DBManager dbManager = new DBManager();
-        dbManager.updateCustomerAddress(customer.getCustomerId(), newAddress);
+                        boolean isUpdateSuccessful = dbManager.updateCustomerAddress(customer.getCustomerId(), newAddress);
+                
+                if (isUpdateSuccessful) {
+                    resultMessage.setText("Address successfully changed");
+                } else {
+                    resultMessage.setText("Failed to change address");
+                }
     }
 });
 
@@ -63,6 +70,8 @@ changeAddress.addActionListener(new ActionListener() {
         add(changeAddress, gbc);
         gbc.gridy = 2;
         add(returnButton, gbc);
+        gbc.gridy = 3;
+        add(resultMessage, gbc); 
     }
 
     private void setInsets(GridBagConstraints gbc, int top, int left, int bottom, int right) {

@@ -30,6 +30,16 @@ public abstract class BankAccount {
         this.accountId = increment;
         usedIDs.add(this.accountId);
     }
+        public BankAccount(int accountId, String accountType, double accountBalance, double interestRate) {
+        this.accountType = accountType;
+        this.accountBalance = accountBalance;
+        this.transactionHistory = new LinkedList<>();
+        this.interestRate = interestRate;
+        this.currentYearlyInterest = 0.0;
+
+        this.accountId = accountId;
+        usedIDs.add(this.accountId);
+    }
 
     // each account type has different interest rates
     public abstract void calculateYearlyInterest();

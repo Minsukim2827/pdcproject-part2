@@ -30,6 +30,7 @@ import javax.swing.*;
 
 public class ChangePhoneNumScreen extends JFrame {
     private Customer customer;
+    private JLabel resultMessage = new JLabel("");
 
     public ChangePhoneNumScreen(Customer customer) {
         
@@ -54,7 +55,13 @@ changePhoneNumber.addActionListener(new ActionListener() {
 
         // Update the phone number in the database
         DBManager dbManager = new DBManager();
-        dbManager.updateCustomerPhoneNumber(customer.getCustomerId(), newPhoneNumber);
+        boolean isUpdateSuccessful = dbManager.updateCustomerPhoneNumber(customer.getCustomerId(), newPhoneNumber);
+                
+                if (isUpdateSuccessful) {
+                    resultMessage.setText("Phone number successfully changed");
+                } else {
+                    resultMessage.setText("Failed to change phone number");
+                }
     }
 });
 
@@ -85,6 +92,8 @@ changePhoneNumber.addActionListener(new ActionListener() {
         add(changePhoneNumber, gbc);
         gbc.gridy = 2;
         add(returnButton, gbc);
+        gbc.gridy = 3;
+        add(resultMessage, gbc); 
     }
 
     private void setInsets(GridBagConstraints gbc, int top, int left, int bottom, int right) {

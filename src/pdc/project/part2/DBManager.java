@@ -5,7 +5,13 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.*;
-import java.util.*;
+import java.text.ParseException;
+import java.time.LocalDate;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.time.format.DateTimeFormatter;
+import java.time.format.*;
+import java.text.SimpleDateFormat;
 
 public class DBManager {
 
@@ -171,15 +177,15 @@ public class DBManager {
                 double balance = resultSet.getDouble("BALANCE");
                 double interestRate = resultSet.getDouble("INTEREST_RATE");
                 switch (accountType) {
-                    case "Savings Account":
-                        bankAccount = new SavingsAccount(accountType, balance, interestRate);
-                        break;
-                    case "Student Account":
-                        bankAccount = new StudentAccount(accountType, balance, interestRate);
-                        break;
-                    case "Business Account":
-                        bankAccount = new BusinessAccount(accountType, balance, interestRate);
-                        break;
+                case "Savings Account":
+                    bankAccount = new SavingsAccount(accountId, accountType, balance, interestRate);
+                    break;
+                case "Student Account":
+                    bankAccount = new StudentAccount(accountId, accountType, balance, interestRate);
+                    break;
+                case "Business Account":
+                    bankAccount = new BusinessAccount(accountId, accountType, balance, interestRate);
+                    break;
                     default:
                         System.out.println("Unknown account type: " + accountType);
                         break;
@@ -204,14 +210,14 @@ public class DBManager {
             statement.setInt(1, accountId);
             ResultSet resultSet = statement.executeQuery();
 
-            while (resultSet.next()) {
-                int transactionId = resultSet.getInt("TRANSACTION_ID");
-                String transactionType = resultSet.getString("TRANSACTION_TYPE");
-                double amount = resultSet.getDouble("AMOUNT");
-                String date = resultSet.getString("DATE");
-                Transaction transaction = new Transaction(transactionType, amount, date);
-                transactions.add(transaction);
-            }
+        while (resultSet.next()) {
+            int transactionId = resultSet.getInt("TRANSACTION_ID");
+            String transactionType = resultSet.getString("TRANSACTION_TYPE");
+            double amount = resultSet.getDouble("AMOUNT");
+            String date = resultSet.getString("DATE");
+            Transaction transaction = new Transaction(transactionId, transactionType, amount, date);
+            transactions.add(transaction);
+        }
 
             resultSet.close();
             statement.close();
@@ -253,7 +259,7 @@ public class DBManager {
         }
     }
     
-    public void updateCustomerAddress(int customerId, String newAddress) {
+public boolean updateCustomerAddress(int customerId, String newAddress) {
     Connection conn = null;
     try {
         conn = DriverManager.getConnection(URL, USER_NAME, PASSWORD);
@@ -261,7 +267,8 @@ public class DBManager {
         try ( PreparedStatement pstmt = conn.prepareStatement(updateAddressSql)) {
             pstmt.setString(1, newAddress);
             pstmt.setInt(2, customerId);
-            pstmt.executeUpdate();
+            int rowsAffected = pstmt.executeUpdate();
+            return rowsAffected > 0; // Return true if the update was successful, false otherwise
         }
     } catch (SQLException ex) {
         ex.printStackTrace();
@@ -274,9 +281,10 @@ public class DBManager {
             }
         }
     }
+    return false; // Return false if an exception was thrown
 }
 
-public void updateCustomerPhoneNumber(int customerId, String newPhoneNumber) {
+public boolean updateCustomerPhoneNumber(int customerId, String newPhoneNumber) {
     Connection conn = null;
     try {
         conn = DriverManager.getConnection(URL, USER_NAME, PASSWORD);
@@ -284,7 +292,8 @@ public void updateCustomerPhoneNumber(int customerId, String newPhoneNumber) {
         try ( PreparedStatement pstmt = conn.prepareStatement(updatePhoneNumberSql)) {
             pstmt.setString(1, newPhoneNumber);
             pstmt.setInt(2, customerId);
-            pstmt.executeUpdate();
+            int rowsAffected = pstmt.executeUpdate();
+            return rowsAffected > 0; // Return true if the update was successful, false otherwise
         }
     } catch (SQLException ex) {
         ex.printStackTrace();
@@ -297,6 +306,7 @@ public void updateCustomerPhoneNumber(int customerId, String newPhoneNumber) {
             }
         }
     }
+    return false; // Return false if an exception was thrown
 }
 
     
@@ -327,16 +337,123 @@ public void updateCustomerPhoneNumber(int customerId, String newPhoneNumber) {
 
         // update the transactions in the BANK_TRANSACTION table
         // assuming you have a method getTransactions() in BankAccount class that returns a list of transactions
-        Queue<Transaction> transactions = account.getTransactionHistory();
-        for (Transaction transaction : transactions) {
-            String updateTransactionSql = "UPDATE BANK_TRANSACTION SET TRANSACTION_TYPE = ?, AMOUNT = ?, DATE = ? WHERE TRANSACTION_ID = ?";
-            try ( PreparedStatement pstmt = conn.prepareStatement(updateTransactionSql)) {
-                pstmt.setString(1, transaction.getTransactionType());
-                pstmt.setDouble(2, transaction.getAmount());
-                // assuming you have a method getDate() in Transaction class that returns a date in 'YYYY-MM-DD' format
-                pstmt.setString(3, transaction.getDate());
-                pstmt.setInt(4, transaction.getTransactionId());
+// update the transactions in the BANK_TRANSACTION table
+Queue<Transaction> transactions = account.getTransactionHistory();
+for (Transaction transaction : transactions) {
+    if (!transactionExists(transaction.getTransactionId())) {
+        String updateTransactionSql = "UPDATE BANK_TRANSACTION SET TRANSACTION_TYPE = ?, AMOUNT = ?, DATE = ? WHERE TRANSACTION_ID = ?";
+        try ( PreparedStatement pstmt = conn.prepareStatement(updateTransactionSql)) {
+            pstmt.setString(1, transaction.getTransactionType());
+            pstmt.setDouble(2, transaction.getAmount());
+            SimpleDateFormat fromUser = new SimpleDateFormat("dd/MM/yyyy");
+            SimpleDateFormat myFormat = new SimpleDateFormat("yyyy-MM-dd");
+            try {
+                String reformattedStr = myFormat.format(fromUser.parse(transaction.getDate()));
+                pstmt.setString(3, reformattedStr);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            pstmt.setInt(4, transaction.getTransactionId());
+            pstmt.executeUpdate();
+        }
+    }
+}
+
+    } catch (SQLException ex) {
+        ex.printStackTrace();
+    } finally {
+        if (conn != null) {
+            try {
+                conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}
+public void updateAccountBalance(int accountId, double newBalance) {
+    Connection conn = null;
+    try {
+        conn = DriverManager.getConnection(URL, USER_NAME, PASSWORD);
+        String updateBalanceSql = "UPDATE ACCOUNT SET BALANCE = ? WHERE ACCOUNT_ID = ?";
+        try ( PreparedStatement pstmt = conn.prepareStatement(updateBalanceSql)) {
+            pstmt.setDouble(1, newBalance);
+            pstmt.setInt(2, accountId);
+            pstmt.executeUpdate();
+        }
+    } catch (SQLException ex) {
+        ex.printStackTrace();
+    } finally {
+        if (conn != null) {
+            try {
+                conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}
+
+    public void insertTransaction(Transaction transaction, Customer customer) {
+        Connection conn = null;
+        try {
+            conn = DriverManager.getConnection(URL, USER_NAME, PASSWORD);
+            int accountId = customer.getBankAccount().getAccountId();
+            String accountCheckSql = "SELECT * FROM ACCOUNT WHERE ACCOUNT_ID = ?";
+            try (PreparedStatement pstmtCheck = conn.prepareStatement(accountCheckSql)) {
+                pstmtCheck.setInt(1, accountId);
+                ResultSet rs = pstmtCheck.executeQuery();
+                if (!rs.next()) {
+                    System.out.println("Account ID " + accountId + " does not exist in ACCOUNT table");
+                    return;
+                }
+            }
+
+            String insertTransactionSql = "INSERT INTO BANK_TRANSACTION (TRANSACTION_ID, ACCOUNT_ID, TRANSACTION_TYPE, AMOUNT, DATE) VALUES (?, ?, ?, ?, ?)";
+            try ( PreparedStatement pstmt = conn.prepareStatement(insertTransactionSql)) {
+                pstmt.setInt(1, transaction.getTransactionId());
+                pstmt.setInt(2, accountId);
+                pstmt.setString(3, transaction.getTransactionType());
+                pstmt.setDouble(4, transaction.getAmount());
+                String originalDate = transaction.getDate();  // assuming getDate() returns date in 'DD/MM/YYYY' format
+                String convertedDate = convertDateFormat(originalDate);
+                pstmt.setDate(5, java.sql.Date.valueOf(convertedDate));
                 pstmt.executeUpdate();
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+
+public String convertDateFormat(String originalDate) {
+    DateTimeFormatter originalFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    LocalDate date = LocalDate.parse(originalDate, originalFormat);
+    DateTimeFormatter targetFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    return date.format(targetFormat);
+}
+
+
+
+public boolean transactionExists(int transactionId) {
+    Connection conn = null;
+    boolean exists = false;
+    try {
+        conn = DriverManager.getConnection(URL, USER_NAME, PASSWORD);
+        String checkTransactionSql = "SELECT COUNT(*) FROM BANK_TRANSACTION WHERE TRANSACTION_ID = ?";
+        try ( PreparedStatement pstmt = conn.prepareStatement(checkTransactionSql)) {
+            pstmt.setInt(1, transactionId);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                exists = rs.getInt(1) > 0;
             }
         }
     } catch (SQLException ex) {
@@ -350,6 +467,7 @@ public void updateCustomerPhoneNumber(int customerId, String newPhoneNumber) {
             }
         }
     }
+    return exists;
 }
 
 
