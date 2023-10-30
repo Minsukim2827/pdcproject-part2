@@ -13,7 +13,8 @@ public class MainBankingApp {
             @Override
             public void run() {
                 SplashScreen splashScreen = new SplashScreen();
-                splashScreen.showSplashScreen();
+                splashScreen.setVisible(true); 
+                
             }
         });
 

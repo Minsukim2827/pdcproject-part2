@@ -4,28 +4,54 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
-//import com.mycompany.comp603project.BankServiceCUI;
-//import com.mycompany.comp603project.FileHandler;
 
 public class DeleteAccountScreen extends JFrame {
-
+    private JTextField customerIdField = new JTextField(20);
+    private JButton deleteButton = new JButton("Delete Account");
+    private JButton returnButton = new JButton("Return");
 
     public DeleteAccountScreen() {
         super("Banking System - Delete Account");
+        setupUI();
+    }
+
+    // Method to setup UI
+    private void setupUI() {
         setSize(600, 400);
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
         setInsets(gbc, 10, 10, 10, 10);
 
         JLabel customerIdLabel = new JLabel("Customer ID:");
-        JTextField customerIdField = new JTextField(20);
 
-        JButton deleteButton = new JButton("Delete Account");
-        JButton returnButton = new JButton("Return");
+        setupDeleteButton();
+        setupReturnButton();
 
-deleteButton.addActionListener(new ActionListener() {
-    @Override
-    public void actionPerformed(ActionEvent e) {
+        addComponentsToLayout(gbc, customerIdLabel);
+    }
+
+    // Method to setup Delete Button
+    private void setupDeleteButton() {
+        deleteButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                deleteCustomerAccount();
+            }
+        });
+    }
+
+    // Method to setup Return Button
+    private void setupReturnButton() {
+        returnButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                returnToSplashScreen();
+            }
+        });
+    }
+
+    // Method to delete customer account
+    private void deleteCustomerAccount() {
         int customerId = Integer.parseInt(customerIdField.getText());
         DBManager dbManager = new DBManager();
         Customer customer = dbManager.getCustomerById(customerId);
@@ -39,23 +65,22 @@ deleteButton.addActionListener(new ActionListener() {
         JOptionPane.showMessageDialog(DeleteAccountScreen.this, "Account deleted for Customer ID: " + customerId);
         dbManager.closeConnection(); // Close connection here after all operations
     }
-});
 
-        returnButton.addActionListener(new ActionListener() {
+    // Method to return to splash screen
+    private void returnToSplashScreen() {
+        SwingUtilities.invokeLater(new Runnable() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        SplashScreen splashscreen = new SplashScreen();
-                        splashscreen.setLocation(getLocation());
-                        splashscreen.setVisible(true);
-                    }
-                });
-                dispose();
+            public void run() {
+                SplashScreen splashscreen = new SplashScreen();
+                splashscreen.setLocation(getLocation());
+                splashscreen.setVisible(true);
             }
         });
+        dispose();
+    }
 
+    // Method to add components to layout
+    private void addComponentsToLayout(GridBagConstraints gbc, JLabel customerIdLabel) {
         gbc.gridx = 0;
         gbc.gridy = 0;
         add(customerIdLabel, gbc);

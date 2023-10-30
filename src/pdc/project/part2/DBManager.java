@@ -29,12 +29,13 @@ public class DBManager {
             System.out.println("Failed to make database connection!");
         }
     }
-
+//main method for testing
     public static void main(String[] args) {
         DBManager playerDB = new DBManager();
         System.out.println(playerDB.getConnection());
     }
 
+    //gets an active DB connection
     public Connection getConnection() {
         try {
             if (this.con == null || !this.con.isValid(2)) {
@@ -47,6 +48,7 @@ public class DBManager {
         return this.con;
     }
 
+    //creates a new db connection
     public void makeConnection() {
         if (this.con == null) {
             try {
@@ -57,7 +59,7 @@ public class DBManager {
             }
         }
     }
-
+//closes db connection
     public void closeConnection() {
         if (con != null) {
             try {
@@ -68,6 +70,7 @@ public class DBManager {
         }
     }
 
+    //inserts a new customer and account into the database
     public void insertCustomerAndAccount(Customer customer, BankAccount account) {
         Connection conn = null;
         try {
@@ -104,7 +107,7 @@ public class DBManager {
             }
         }
     }
-
+//poplate used IDs for customers, accounts, and transactions
     public void populateUsedIds() {
         Connection conn = null;
         try {
@@ -139,6 +142,7 @@ public class DBManager {
         }
     }
 
+    //retrieve customers by their id
     public Customer getCustomerById(int id) {
         Customer customer = null;
         try {
@@ -164,6 +168,7 @@ public class DBManager {
         return customer;
     }
 
+    //get a bank account by their customer id
     public BankAccount getBankAccountByCustomerId(int customerId) {
         BankAccount bankAccount = null;
         try {
@@ -203,6 +208,7 @@ public class DBManager {
         return bankAccount;
     }
 
+    //get the latest transactions for an account
     public Queue<Transaction> getTransactionsByAccountId(int accountId) {
         Queue<Transaction> transactions = new LinkedList<>();
         try {
@@ -227,11 +233,13 @@ public class DBManager {
         return transactions;
     }
 
+    // retrieve all the customers accounts
     public ResultSet getAllAccounts() throws SQLException {
         Statement statement = con.createStatement();
         return statement.executeQuery("SELECT * FROM CUSTOMER");
     }
 
+    //deletes a customer and the associated data from the database
     public void deleteCustomer(int customerId) {
         try ( Connection conn = getConnection()) {
             // First, delete the associated records in the BANK_TRANSACTION table
@@ -259,6 +267,7 @@ public class DBManager {
         }
     }
     
+    //updates the customers address
 public boolean updateCustomerAddress(int customerId, String newAddress) {
     Connection conn = null;
     try {
@@ -283,7 +292,7 @@ public boolean updateCustomerAddress(int customerId, String newAddress) {
     }
     return false; // Return false if an exception was thrown
 }
-
+//updates the customers phone number
 public boolean updateCustomerPhoneNumber(int customerId, String newPhoneNumber) {
     Connection conn = null;
     try {
@@ -310,6 +319,7 @@ public boolean updateCustomerPhoneNumber(int customerId, String newPhoneNumber) 
 }
 
     
+//updates customer and account details to teh database
     public void updateCustomerDetails(Customer customer) {
     Connection conn = null;
     try {
@@ -335,9 +345,7 @@ public boolean updateCustomerPhoneNumber(int customerId, String newPhoneNumber) 
             pstmt.executeUpdate();
         }
 
-        // update the transactions in the BANK_TRANSACTION table
-        // assuming you have a method getTransactions() in BankAccount class that returns a list of transactions
-// update the transactions in the BANK_TRANSACTION table
+  //adds nonexisting transactions
 Queue<Transaction> transactions = account.getTransactionHistory();
 for (Transaction transaction : transactions) {
     if (!transactionExists(transaction.getTransactionId())) {
@@ -371,6 +379,8 @@ for (Transaction transaction : transactions) {
         }
     }
 }
+    
+    //updates teh balance of an account
 public void updateAccountBalance(int accountId, double newBalance) {
     Connection conn = null;
     try {
@@ -393,7 +403,7 @@ public void updateAccountBalance(int accountId, double newBalance) {
         }
     }
 }
-
+//inserts a new transaction for a customers account
     public void insertTransaction(Transaction transaction, Customer customer) {
         Connection conn = null;
         try {
@@ -409,6 +419,7 @@ public void updateAccountBalance(int accountId, double newBalance) {
                 }
             }
 
+           
             String insertTransactionSql = "INSERT INTO BANK_TRANSACTION (TRANSACTION_ID, ACCOUNT_ID, TRANSACTION_TYPE, AMOUNT, DATE) VALUES (?, ?, ?, ?, ?)";
             try ( PreparedStatement pstmt = conn.prepareStatement(insertTransactionSql)) {
                 pstmt.setInt(1, transaction.getTransactionId());
@@ -433,7 +444,7 @@ public void updateAccountBalance(int accountId, double newBalance) {
         }
     }
 
-
+ //converts date format from dd/mm/yyyy to yyyy-mm-dd
 public String convertDateFormat(String originalDate) {
     DateTimeFormatter originalFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     LocalDate date = LocalDate.parse(originalDate, originalFormat);
@@ -442,7 +453,7 @@ public String convertDateFormat(String originalDate) {
 }
 
 
-
+//checks if a transaction exists by its id
 public boolean transactionExists(int transactionId) {
     Connection conn = null;
     boolean exists = false;

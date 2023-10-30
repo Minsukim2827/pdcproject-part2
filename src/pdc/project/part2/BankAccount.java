@@ -17,6 +17,7 @@ public abstract class BankAccount {
     private int accountId;
     Scanner scanner = new Scanner(System.in);
 
+    // constructors------------
     public BankAccount(String accountType, double accountBalance, double interestRate) {
         this.accountType = accountType;
         this.accountBalance = accountBalance;
@@ -40,10 +41,12 @@ public abstract class BankAccount {
         this.accountId = accountId;
         usedIDs.add(this.accountId);
     }
-
+//----------------------
+        
     // each account type has different interest rates
     public abstract void calculateYearlyInterest();
 
+    //method for depositing money into the account
     public void depositMoney(double amount) {
         // Input validation
         while (true) {
@@ -61,6 +64,7 @@ public abstract class BankAccount {
         calculateYearlyInterest();
     }
 
+    //method for withdrawing money from the account
     public void withdrawMoney(double amount) {
         while (true) {
             if (amount > 0) {
@@ -81,17 +85,18 @@ public abstract class BankAccount {
         }
         calculateYearlyInterest();
     }
-
+//adds a transaction to the transaction history
     public void addTransaction(Transaction transaction) {
         transactionHistory.add(transaction);
         if (transactionHistory.size() > 5) {
             transactionHistory.poll();
         }
     }
+    // adds a used account id to the set
     public static void addUsedId(int id) {
     usedIDs.add(id);
 }
-
+//checks if set contains account id
     public static boolean accountExists(int accountIdToCheck) {
         return usedIDs.contains(accountIdToCheck);
     }

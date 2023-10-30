@@ -9,44 +9,58 @@ import javax.swing.*;
 
 public class DisplayDetailsScreen extends JFrame {
     private Customer customer;
+    private JTextArea detailsArea = new JTextArea();
+    private JButton backButton = new JButton("Back");
 
     public DisplayDetailsScreen(Customer customer) {
         super("Banking System - Display Details");
         this.customer = customer;
+        setupUI();
+    }
 
+    // Method to setup UI
+    private void setupUI() {
         setTitle("Display Details");
         setSize(600, 400);
         GridBagConstraints gbc = new GridBagConstraints();
         setInsets(gbc, 10, 10, 10, 10);
 
-        JTextArea detailsArea = new JTextArea();
         detailsArea.setEditable(false);
         detailsArea.setText(getDetails());
 
         // Wrap the JTextArea in a JScrollPane
         JScrollPane scrollPane = new JScrollPane(detailsArea);
         add(scrollPane);
-        
-        JButton backButton = new JButton("Back");
-        backButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        HomeScreen homeScreen = new HomeScreen(customer);
-                        homeScreen.setLocation(getLocation());
-                        homeScreen.setVisible(true);
-                    }
-                });
-                dispose();
-            }
-        });
+
+        setupBackButton();
 
         add(backButton, BorderLayout.SOUTH);
     }
-    
 
+    // Method to setup Back Button
+    private void setupBackButton() {
+        backButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                returnToHomeScreen();
+            }
+        });
+    }
+
+    // Method to return to home screen
+    private void returnToHomeScreen() {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                HomeScreen homeScreen = new HomeScreen(customer);
+                homeScreen.setLocation(getLocation());
+                homeScreen.setVisible(true);
+            }
+        });
+        dispose();
+    }
+
+    // Method to get details
     private String getDetails() {
         StringBuilder details = new StringBuilder();
         details.append("Customer Details:\n");
