@@ -21,16 +21,32 @@ public class NewAccountScreen extends JFrame {
     }
 
     // Method to setup the UI
-    private void setupUI() {
-        setTitle("New Account Creation");
-        setSize(600, 400);
-        setLayout(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        setInsets(gbc, 10, 10, 10, 10);
+private void setupUI() {
+    setTitle("New Account Creation");
+    setSize(600, 400);
+    setLayout(new GridBagLayout());
+    GridBagConstraints gbc = new GridBagConstraints();
+    setInsets(gbc, 10, 10, 10, 10);
 
-        setupInputFields(gbc);
-        setupButtons(gbc);
-    }
+    // Apply gradient to the background
+    JPanel gradientPanel = new JPanel() {
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            Graphics2D g2d = (Graphics2D) g;
+            int w = getWidth();
+            int h = getHeight();
+            GradientPaint gp = new GradientPaint(0, 0, Color.DARK_GRAY, w, h, Color.ORANGE);
+            g2d.setPaint(gp);
+            g2d.fillRect(0, 0, w, h);
+        }
+    };
+    gradientPanel.setLayout(new GridBagLayout());
+    setContentPane(gradientPanel);
+
+    setupInputFields(gbc);
+    setupButtons(gbc);
+}
 
     // Method to setup the input fields
     private void setupInputFields(GridBagConstraints gbc) {
@@ -66,20 +82,22 @@ public class NewAccountScreen extends JFrame {
     }
 
     // Method to setup the buttons
-    private void setupButtons(GridBagConstraints gbc) {
-        JButton createButton = new JButton("Create Account");
-        createButton.addActionListener(this::createAccount);
+private void setupButtons(GridBagConstraints gbc) {
+    JButton createButton = new JButton("Create Account");
+    createButton.addActionListener(this::createAccount);
+    createButton.setBackground(Color.GREEN); // Set button color to green
 
-        JButton returnButton = new JButton("Return");
-        returnButton.addActionListener(e -> openScreen(new SplashScreen()));
+    JButton returnButton = new JButton("Return");
+    returnButton.addActionListener(e -> openScreen(new SplashScreen()));
+    returnButton.setBackground(Color.GREEN); // Set button color to green
 
-        gbc.gridx = 1;
-        gbc.gridy = 4;
-        add(createButton, gbc);
+    gbc.gridx = 1;
+    gbc.gridy = 4;
+    add(createButton, gbc);
 
-        gbc.gridy = 5;
-        add(returnButton, gbc);
-    }
+    gbc.gridy = 5;
+    add(returnButton, gbc);
+}
 
     // Method to handle account creation
     protected void createAccount(ActionEvent e) {
@@ -94,7 +112,7 @@ public class NewAccountScreen extends JFrame {
 
         dbManager.insertCustomerAndAccount(newCustomer, newAccount);
 
-        String message = "Name: " + name + "\nAddress: " + address + "\nPhone: " + phone + "\nAccount Type: " + selectedAccountType + "\nCustomer ID: "; // Put in customer ID in here @minsu
+        String message = "Name: " + name + "\nAddress: " + address + "\nPhone: " + phone + "\nAccount Type: " + selectedAccountType + "\nCustomer ID: " + newCustomer.getCustomerId(); // Put in customer ID in here @minsu
         JOptionPane.showMessageDialog(NewAccountScreen.this, message);
     }
 

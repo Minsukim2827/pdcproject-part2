@@ -21,34 +21,36 @@ public class CurrentAccountScreen extends JFrame {
     }
 
     // Method to setup UI
-    private void setupUI() {
-        setTitle("Current Accounts");
-        setSize(600, 400);
-        setLayout(new BorderLayout());
+private void setupUI() {
+    setTitle("Current Accounts");
+    setSize(600, 400);
+    setLayout(new BorderLayout());
 
-        accountList = new JList<>();
-        scrollPane = new JScrollPane(accountList);
+    accountList = new JList<>();
+    scrollPane = new JScrollPane(accountList);
 
-        add(scrollPane, BorderLayout.CENTER);
+    add(scrollPane, BorderLayout.CENTER);
 
-        setupBackButton();
+    setupBackButton();
 
-        JPanel buttonPanel = new JPanel();
-        buttonPanel.add(backButton);
+    JPanel buttonPanel = new JPanel();
+    buttonPanel.add(backButton);
+    buttonPanel.setBackground(Color.DARK_GRAY); // Set background color to dark gray
 
-        add(buttonPanel, BorderLayout.SOUTH);
-    }
+    add(buttonPanel, BorderLayout.SOUTH);
+}
 
-    // Method to setup Back Button
-    private void setupBackButton() {
-        backButton = new JButton("Back");
-        backButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                returnToSplashScreen();
-            }
-        });
-    }
+// Method to setup Back Button
+private void setupBackButton() {
+    backButton = new JButton("Back");
+    backButton.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            returnToSplashScreen();
+        }
+    });
+    backButton.setBackground(Color.GREEN); // Set button color to green
+}
 
     // Method to return to splash screen
     private void returnToSplashScreen() {

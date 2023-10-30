@@ -12,6 +12,7 @@ public class DepositScreen extends JFrame {
     private JTextField depositField = new JTextField(20);
     private JButton depositButton = new JButton("Deposit");
     private JButton returnButton = new JButton("Return");
+    private JPanel mainPanel;
 
     public DepositScreen(Customer customer) {
         super("Banking System - Deposit Funds");
@@ -22,7 +23,25 @@ public class DepositScreen extends JFrame {
     // Method to setup UI
     private void setupUI() {
         setSize(600, 400);
-        setLayout(new GridBagLayout());
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
+
+        mainPanel = new JPanel(new GridBagLayout()) {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                Graphics2D g2d = (Graphics2D) g;
+                Color color1 = Color.DARK_GRAY;
+                Color color2 = Color.ORANGE;
+                int w = getWidth();
+                int h = getHeight();
+                GradientPaint gp = new GradientPaint(
+                        0, 0, color1, w, h, color2);
+                g2d.setPaint(gp);
+                g2d.fillRect(0, 0, w, h);
+            }
+        };
+
         GridBagConstraints gbc = new GridBagConstraints();
         setInsets(gbc, 10, 10, 10, 10);
 
@@ -32,6 +51,8 @@ public class DepositScreen extends JFrame {
         setupReturnButton();
 
         addComponentsToLayout(gbc, customerDeposit);
+
+        add(mainPanel);
     }
 
     // Method to setup Deposit Button
@@ -42,6 +63,7 @@ public class DepositScreen extends JFrame {
                 depositFunds();
             }
         });
+        depositButton.setBackground(Color.GREEN); // Set button color to green
     }
 
     // Method to setup Return Button
@@ -52,6 +74,7 @@ public class DepositScreen extends JFrame {
                 returnToHomeScreen();
             }
         });
+        returnButton.setBackground(Color.GREEN); // Set button color to green
     }
 
     // Method to deposit funds
@@ -101,15 +124,15 @@ public class DepositScreen extends JFrame {
     private void addComponentsToLayout(GridBagConstraints gbc, JLabel customerDeposit) {
         gbc.gridx = 0;
         gbc.gridy = 0;
-        add(customerDeposit, gbc);
+        mainPanel.add(customerDeposit, gbc);
 
         gbc.gridx = 1;
-        add(depositField, gbc);
+        mainPanel.add(depositField, gbc);
 
         gbc.gridy = 1;
-        add(depositButton, gbc);
+        mainPanel.add(depositButton, gbc);
         gbc.gridy = 2;
-        add(returnButton, gbc);
+        mainPanel.add(returnButton, gbc);
     }
 
     private void setInsets(GridBagConstraints gbc, int top, int left, int bottom, int right) {

@@ -6,11 +6,13 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
+import java.awt.*;
 
 public class DisplayDetailsScreen extends JFrame {
     private Customer customer;
     private JTextArea detailsArea = new JTextArea();
     private JButton backButton = new JButton("Back");
+    private JPanel mainPanel;
 
     public DisplayDetailsScreen(Customer customer) {
         super("Banking System - Display Details");
@@ -19,33 +21,49 @@ public class DisplayDetailsScreen extends JFrame {
     }
 
     // Method to setup UI
-    private void setupUI() {
-        setTitle("Display Details");
-        setSize(600, 400);
-        GridBagConstraints gbc = new GridBagConstraints();
-        setInsets(gbc, 10, 10, 10, 10);
+private void setupUI() {
+    setTitle("Display Details");
+    setSize(600, 400);
+    setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    setLocationRelativeTo(null);
 
-        detailsArea.setEditable(false);
-        detailsArea.setText(getDetails());
+    mainPanel = new JPanel(new BorderLayout());
+    mainPanel.setBackground(Color.WHITE); // Set main panel background to white
 
-        // Wrap the JTextArea in a JScrollPane
-        JScrollPane scrollPane = new JScrollPane(detailsArea);
-        add(scrollPane);
+    detailsArea.setEditable(false);
+    detailsArea.setText(getDetails());
+    detailsArea.setOpaque(false); // Make JTextArea transparent
 
-        setupBackButton();
+    // Wrap the JTextArea in a JScrollPane
+    JScrollPane scrollPane = new JScrollPane(detailsArea);
+    scrollPane.setOpaque(false); // Make JScrollPane transparent
+    scrollPane.getViewport().setOpaque(false); // Make JScrollPane's viewport transparent
 
-        add(backButton, BorderLayout.SOUTH);
-    }
+    setupBackButton();
 
-    // Method to setup Back Button
-    private void setupBackButton() {
-        backButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                returnToHomeScreen();
-            }
-        });
-    }
+    // Create a new JPanel for the button and set its background to dark grey
+    JPanel buttonPanel = new JPanel();
+    buttonPanel.setBackground(Color.DARK_GRAY);
+    buttonPanel.add(backButton);
+
+    mainPanel.add(scrollPane, BorderLayout.CENTER);
+    mainPanel.add(buttonPanel, BorderLayout.SOUTH);
+
+    add(mainPanel);
+}
+
+// Method to setup Back Button
+private void setupBackButton() {
+    backButton.setPreferredSize(new Dimension(100, 20)); // Set button size
+    backButton.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            returnToHomeScreen();
+        }
+    });
+    backButton.setBackground(Color.GREEN); // Set button color to green
+}
+
 
     // Method to return to home screen
     private void returnToHomeScreen() {
@@ -71,7 +89,7 @@ public class DisplayDetailsScreen extends JFrame {
         BankAccount account = customer.getBankAccount();
         details.append("Bank Account Details:\n");
         details.append("Account Type: " + account.getAccountType() + "\n");
-        details.append("Balance: " + account.getAccountBalance() + "\n");
+        details.append("Balance: " + String.format("%.2f",account.getAccountBalance()) + "\n");
         details.append("Interest Rate: " + account.getInterestRate() + "\n\n");
 
         details.append("Transaction History:\n");

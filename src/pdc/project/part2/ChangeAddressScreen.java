@@ -11,6 +11,7 @@ public class ChangeAddressScreen extends JFrame {
     private JTextField AddressField = new JTextField(20);
     private JButton changeAddress = new JButton("Change");
     private JButton returnButton = new JButton("Return");
+    private JPanel mainPanel;
 
     public ChangeAddressScreen(Customer customer) {
         super("Banking System - Change Address");
@@ -21,7 +22,25 @@ public class ChangeAddressScreen extends JFrame {
     // Method to setup UI
     private void setupUI() {
         setSize(600, 400);
-        setLayout(new GridBagLayout());
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
+
+        mainPanel = new JPanel(new GridBagLayout()) {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                Graphics2D g2d = (Graphics2D) g;
+                Color color1 = Color.DARK_GRAY;
+                Color color2 = Color.ORANGE;
+                int w = getWidth();
+                int h = getHeight();
+                GradientPaint gp = new GradientPaint(
+                        0, 0, color1, w, h, color2);
+                g2d.setPaint(gp);
+                g2d.fillRect(0, 0, w, h);
+            }
+        };
+
         GridBagConstraints gbc = new GridBagConstraints();
         setInsets(gbc, 10, 10, 10, 10);
 
@@ -31,7 +50,10 @@ public class ChangeAddressScreen extends JFrame {
         setupReturnButton();
 
         addComponentsToLayout(gbc, customerAddress);
+
+        add(mainPanel);
     }
+
 
     // Method to setup Change Address Button
     private void setupChangeAddressButton() {
@@ -41,6 +63,7 @@ public class ChangeAddressScreen extends JFrame {
                 changeCustomerAddress();
             }
         });
+        changeAddress.setBackground(Color.GREEN); // Set button color to green
     }
 
     // Method to setup Return Button
@@ -51,6 +74,7 @@ public class ChangeAddressScreen extends JFrame {
                 returnToHomeScreen();
             }
         });
+        returnButton.setBackground(Color.GREEN); // Set button color to green
     }
 
     // Method to change customer address
@@ -86,17 +110,17 @@ public class ChangeAddressScreen extends JFrame {
     private void addComponentsToLayout(GridBagConstraints gbc, JLabel customerAddress) {
         gbc.gridx = 0;
         gbc.gridy = 0;
-        add(customerAddress, gbc);
+        mainPanel.add(customerAddress, gbc);
 
         gbc.gridx = 1;
-        add(AddressField, gbc);
+        mainPanel.add(AddressField, gbc);
 
         gbc.gridy = 1;
-        add(changeAddress, gbc);
+        mainPanel.add(changeAddress, gbc);
         gbc.gridy = 2;
-        add(returnButton, gbc);
+        mainPanel.add(returnButton, gbc);
         gbc.gridy = 3;
-        add(resultMessage, gbc);
+        mainPanel.add(resultMessage, gbc);
     }
 
     private void setInsets(GridBagConstraints gbc, int top, int left, int bottom, int right) {

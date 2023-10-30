@@ -8,6 +8,7 @@ public class WithdrawScreen extends JFrame {
     private Customer customer;
     private DBManager dbManager;
     private JTextField withdrawField;
+    private JPanel mainPanel;
 
     public WithdrawScreen(Customer customer) {
         super("Banking System - Withdraw Funds");
@@ -20,12 +21,32 @@ public class WithdrawScreen extends JFrame {
     // Method to setup the UI
     private void setupUI() {
         setSize(600, 400);
-        setLayout(new GridBagLayout());
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
+
+        mainPanel = new JPanel(new GridBagLayout()) {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                Graphics2D g2d = (Graphics2D) g;
+                Color color1 = Color.DARK_GRAY;
+                Color color2 = Color.ORANGE;
+                int w = getWidth();
+                int h = getHeight();
+                GradientPaint gp = new GradientPaint(
+                        0, 0, color1, w, h, color2);
+                g2d.setPaint(gp);
+                g2d.fillRect(0, 0, w, h);
+            }
+        };
+
         GridBagConstraints gbc = new GridBagConstraints();
         setInsets(gbc, 10, 10, 10, 10);
 
         setupWithdrawField(gbc);
         setupButtons(gbc);
+
+        add(mainPanel);
     }
 
     // Method to setup the withdraw field
@@ -35,26 +56,28 @@ public class WithdrawScreen extends JFrame {
 
         gbc.gridx = 0;
         gbc.gridy = 0;
-        add(customerWithdraw, gbc);
+        mainPanel.add(customerWithdraw, gbc);
 
         gbc.gridx = 1;
-        add(withdrawField, gbc);
+        mainPanel.add(withdrawField, gbc);
     }
 
     // Method to setup the buttons
     private void setupButtons(GridBagConstraints gbc) {
         JButton withdrawButton = new JButton("Withdraw");
         withdrawButton.addActionListener(this::withdraw);
+        withdrawButton.setBackground(Color.GREEN); // Set button color to green
 
         JButton returnButton = new JButton("Return");
         returnButton.addActionListener(e -> openScreen(new HomeScreen(customer)));
+        returnButton.setBackground(Color.GREEN); // Set button color to green
 
         gbc.gridx = 1;
         gbc.gridy = 1;
-        add(withdrawButton, gbc);
+        mainPanel.add(withdrawButton, gbc);
 
         gbc.gridy = 2;
-        add(returnButton, gbc);
+        mainPanel.add(returnButton, gbc);
     }
 
     // Method to handle withdrawal

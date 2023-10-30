@@ -1,4 +1,5 @@
 package pdc.project.part2;
+import javax.swing.JOptionPane;
 
 public class SavingsAccount extends BankAccount {
 
@@ -31,6 +32,7 @@ public class SavingsAccount extends BankAccount {
     @Override
     public void withdrawMoney(double amount) {
         if (getAccountBalance() - amount < MINIMUM_BALANCE) {
+            JOptionPane.showMessageDialog(null, "Cannot go below the minimum balance of 500");
             System.out.println("Cannot process the transaction. Savings account must maintain a minimum balance of " + MINIMUM_BALANCE +"\n");
         } else {
             System.out.println("$" + amount+ " has been withdrawn.\n");

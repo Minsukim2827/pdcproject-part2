@@ -1,4 +1,5 @@
 package pdc.project.part2;
+import javax.swing.JOptionPane;
 public class StudentAccount extends BankAccount {
     private final double OVERDRAFT_FEE = 10.00;
     private static final double INTEREST_RATE = 0.005;
@@ -23,6 +24,7 @@ public class StudentAccount extends BankAccount {
     @Override
     public void withdrawMoney(double amount) {
         if (amount > getAccountBalance()) {
+            JOptionPane.showMessageDialog(null, "Balance going into negative, overdraft fee of $10 applies");
             System.out.println(String.format("Insufficient balance. Withdrawing %.2f with an overdraft fee of %.2f", amount, this.OVERDRAFT_FEE));
             double resultingBalance = getAccountBalance() - amount - OVERDRAFT_FEE;
             setAccountBalance(resultingBalance);

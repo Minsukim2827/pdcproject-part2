@@ -16,39 +16,58 @@ public class DeleteAccountScreen extends JFrame {
     }
 
     // Method to setup UI
-    private void setupUI() {
-        setSize(600, 400);
-        setLayout(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        setInsets(gbc, 10, 10, 10, 10);
+// Method to setup UI
+private void setupUI() {
+    setSize(600, 400);
+    setLayout(new GridBagLayout());
+    GridBagConstraints gbc = new GridBagConstraints();
+    setInsets(gbc, 10, 10, 10, 10);
 
-        JLabel customerIdLabel = new JLabel("Customer ID:");
+    JLabel customerIdLabel = new JLabel("Customer ID:");
 
-        setupDeleteButton();
-        setupReturnButton();
+    setupDeleteButton();
+    setupReturnButton();
 
-        addComponentsToLayout(gbc, customerIdLabel);
-    }
+    // Apply gradient to the background
+    JPanel gradientPanel = new JPanel() {
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            Graphics2D g2d = (Graphics2D) g;
+            int w = getWidth();
+            int h = getHeight();
+            GradientPaint gp = new GradientPaint(0, 0, Color.DARK_GRAY, w, h, Color.ORANGE);
+            g2d.setPaint(gp);
+            g2d.fillRect(0, 0, w, h);
+        }
+    };
+    gradientPanel.setLayout(new GridBagLayout());
+    setContentPane(gradientPanel);
 
-    // Method to setup Delete Button
-    private void setupDeleteButton() {
-        deleteButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                deleteCustomerAccount();
-            }
-        });
-    }
+    addComponentsToLayout(gbc, customerIdLabel);
+}
 
-    // Method to setup Return Button
-    private void setupReturnButton() {
-        returnButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                returnToSplashScreen();
-            }
-        });
-    }
+// Method to setup Delete Button
+private void setupDeleteButton() {
+    deleteButton.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            deleteCustomerAccount();
+        }
+    });
+    deleteButton.setBackground(Color.GREEN); // Set button color to green
+}
+
+// Method to setup Return Button
+private void setupReturnButton() {
+    returnButton.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            returnToSplashScreen();
+        }
+    });
+    returnButton.setBackground(Color.GREEN); // Set button color to green
+}
 
     // Method to delete customer account
     private void deleteCustomerAccount() {
