@@ -10,6 +10,9 @@ public class StudentAccount extends BankAccount {
     public StudentAccount(String accountType,double accountBalance, double interestRate) {
         super(accountType, accountBalance, interestRate);
     }
+            public StudentAccount(int accountId, String accountType,double accountBalance, double interestRate) {
+        super(accountId, accountType, accountBalance, interestRate);
+    }
 
     @Override
     public void calculateYearlyInterest() {

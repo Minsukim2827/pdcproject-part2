@@ -10,6 +10,9 @@ public class BusinessAccount extends BankAccount {
     public BusinessAccount(String accountType,double accountBalance, double interestRate) {
         super(accountType, accountBalance, interestRate);
     }
+        public BusinessAccount(int accountId, String accountType,double accountBalance, double interestRate) {
+        super(accountId, accountType, accountBalance, interestRate);
+    }
     
     @Override
     public void calculateYearlyInterest() {

@@ -22,9 +22,12 @@ public class DisplayDetailsScreen extends JFrame {
         JTextArea detailsArea = new JTextArea();
         detailsArea.setEditable(false);
         detailsArea.setText(getDetails());
-        add(detailsArea);
+
+        // Wrap the JTextArea in a JScrollPane
+        JScrollPane scrollPane = new JScrollPane(detailsArea);
+        add(scrollPane);
         
-                JButton backButton = new JButton("Back");
+        JButton backButton = new JButton("Back");
         backButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

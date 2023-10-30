@@ -4,13 +4,17 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
+import java.time.LocalDate;
+import java.util.Date;
 //import com.mycompany.comp603project.BankServiceCUI;
 //import com.mycompany.comp603project.FileHandler;
 
 public class DepositScreen extends JFrame {
+    private Customer customer;
 
-    public DepositScreen() {
+    public DepositScreen(Customer customer) {
         super("Banking System - Deposit Funds");
+        this.customer = customer;
         setSize(600, 400);
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -22,12 +26,38 @@ public class DepositScreen extends JFrame {
         JButton depositButton = new JButton("Deposit");
         JButton returnButton = new JButton("Return");
 
-        depositButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // implement withdraw function @minsu
+depositButton.addActionListener(new ActionListener() {
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        String depositText = depositField.getText();
+        try {
+            double depositAmount = Double.parseDouble(depositText);
+            if (depositAmount > 0) {
+                // Update the balance in the Account object
+                BankAccount account = customer.getBankAccount(); // assuming that the Customer class has a method to get the account
+                account.depositMoney(depositAmount); // assuming that the Account class has a deposit method
+
+                // Update the balance in the database
+                DBManager dbManager = new DBManager();
+                dbManager.updateAccountBalance(account.getAccountId(), account.getAccountBalance());
+
+                // Create a new Transaction object and add it to the transaction history
+                Transaction transaction = new Transaction("Deposit", depositAmount);
+                account.addTransaction(transaction); // assuming that the Account class has a method to add a transaction
+
+                // Insert a new row in the BANK_TRANSACTION table in the database
+                dbManager.insertTransaction(transaction, customer);
+
+                JOptionPane.showMessageDialog(DepositScreen.this, "Deposit successful.");
+            } else {
+                JOptionPane.showMessageDialog(DepositScreen.this, "Invalid deposit amount.");
             }
-        });
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(DepositScreen.this, "Invalid deposit amount format.");
+        }
+    }
+});
+
 
         returnButton.addActionListener(new ActionListener() {
             @Override
@@ -35,9 +65,9 @@ public class DepositScreen extends JFrame {
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
                     public void run() {
-                        SplashScreen splashscreen = new SplashScreen();
-                        splashscreen.setLocation(getLocation());
-                        splashscreen.setVisible(true);
+                        HomeScreen homeScreen = new HomeScreen(customer);
+                        homeScreen.setLocation(getLocation());
+                        homeScreen.setVisible(true);
                     }
                 });
                 dispose();
