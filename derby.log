@@ -12,3 +12,9 @@ os.arch=amd64
 os.version=10.0
 derby.system.home=C:\Users\Minsu\Desktop\Uni\comp603\pdc-project-part2
 Database Class Loader started - derby.database.classpath=''
+----------------------------------------------------------------
+Mon Oct 30 15:30:16 NZDT 2023: Shutting down Derby engine
+----------------------------------------------------------------
+Mon Oct 30 15:30:16 NZDT 2023:
+Shutting down instance a816c00e-018b-7e61-6933-00004c27548e on database directory C:\Users\Minsu\Desktop\Uni\comp603\pdc-project-part2\BankDB with class loader jdk.internal.loader.ClassLoaders$AppClassLoader@2cdf8d8a 
+----------------------------------------------------------------
